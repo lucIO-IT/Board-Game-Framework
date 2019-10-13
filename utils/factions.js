@@ -9,7 +9,6 @@ const factions = {
         characters.otto,
         //[regions.sassonia, regions.bavaria, regions.franconia, regions.lorena],
         ['IT-23', 'IT-21', 'IT-42'],
-        'catholic',
         'black'
     ),
     italy: new Faction(
@@ -17,13 +16,33 @@ const factions = {
         characters.berengar,
         ['IT-25'],
         //[regions.lombardy, regions.tuscia, regions.friuli, regions.romagna],
-        'catholic',
         'green'
     )
 };
 
-function createInterface(id, panel, human){
+function createInterface(div, panel, human){
     let CURRENT_REGION = '';
+    function initializeMap() {
+        return document.getElementById(div).innerHTML = `
+            <!--<div class="canvas-container">
+                <canvas id="game_canvas" width="700" height="400" style="background: rgb(225,225,225); margin: auto;"></canvas>
+            </div>-->
+            <div style="width: 900px; height: 100%;">
+                ${map}
+            </div>      
+            <div id="panel"><ul></ul></div>  
+            <div class="bar">
+                <div class="info">
+                    <span>Faction name: ${human.name}</span>
+                    <span>Leader: ${human.king.name}</span>
+                    <span>Treasury: ${human.money}</span>
+                </div>                
+                <div>
+                    <button class="end-turn">End Turn</button>
+                </div>
+            </div>
+        `;
+    }
     function deleteColors(arr) {
         return arr.forEach(e=>e.style.fill=null)
     }
@@ -46,7 +65,10 @@ function createInterface(id, panel, human){
     function battleEvent(attacker, target) {
         let result = (attacker.troops + (Math.random()*10) - (target.troops * target.defence));
         if (result > 0){
-            target.troops = Math.round(attacker.troops - (target.troops * (Math.random()*1)));
+            target.troops = Math.round(attacker.troops - (target.troops/2));
+            if (target.troops < 0){
+                target.troops = 0;
+            }
             attacker.troops = 0;
             return 'won'
         } else {
@@ -88,23 +110,25 @@ function createInterface(id, panel, human){
                 target.style.fill = null;
                 target.style.opacity = null;
             }, 2000);
-        } else {
-            console.log(path.style.fill)
+        }
+        if (target.style.fill == 'yellow'){
+            PANEL.innerHTML = `
+                Move ${f_reg.troops} troops from from ${f_reg.name}
+                to ${t_reg.name} 
+            `;
+            target.style.opacity = '0.5';
+            setTimeout(function() {
+                regions[target.id].troops = regions[CURRENT_REGION].troops;
+                regions[CURRENT_REGION].troops = 0;
+                target.style.opacity = null;
+            }, 2000);
         }
     }
-    document.getElementById(id).innerHTML = `
-        <!--<div class="canvas-container">
-            <canvas id="game_canvas" width="700" height="400" style="background: rgb(225,225,225); margin: auto;"></canvas>
-        </div>-->
-        <div style="width: 900px; height: 100%;">
-            ${map}
-        </div>      
-        <div id="panel"></div>  
-        <div class="bar">
-            <span>Nome fazione: ${human.name}</span>
-            <span>Nome sovrano: ${human.king.name}</span>
-        </div>
-    `;
+    function endTurnEvent() {
+        Object.keys(factions).forEach(e => factions[e].get_income(regions));
+        document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
+    }
+    initializeMap();
     const mapPathRegions = document.querySelectorAll('path');
     const PANEL = document.getElementById(panel);
     createCSSClass();
@@ -120,20 +144,15 @@ function createInterface(id, panel, human){
             deleteColors(mapPathRegions);
             CURRENT_REGION = path.id;
             let get_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(path.id))[0];
-            PANEL.innerHTML = `
-                    Faction: ${factions[get_faction].name}
-                    \nLeader: ${factions[get_faction].king.name}
-                    \nRank: ?
-                `;
+            PANEL.innerHTML = factions[get_faction].get_panel_info();
             if (human.provinces.includes(path.id)){
                 path.style.fill = 'blue';
                 checkNeighbours(path, mapPathRegions, regions, human);
-                PANEL.innerHTML += `
-                    Province: ${regions[CURRENT_REGION].name}
-                    \nCapital: ${regions[CURRENT_REGION].capital}
-                    \nTroops: ${regions[CURRENT_REGION].troops}
-                    \nDefence: ${regions[CURRENT_REGION].defence}
-                `;
+                PANEL.innerHTML += regions[CURRENT_REGION].render_panel_info();
+                document.querySelector('.raise-troops').addEventListener('click', () => {
+                    PANEL.innerHTML = regions[CURRENT_REGION].raise_troops(human);
+                    human.update_info_bar();
+                });
             } else {
 
             }
@@ -147,6 +166,9 @@ function createInterface(id, panel, human){
             }
             return false;
         }, false);
+    });
+    document.querySelector('.end-turn').addEventListener('click', () =>{
+        endTurnEvent();
     });
 }
 function selectFaction(faction, arr){
