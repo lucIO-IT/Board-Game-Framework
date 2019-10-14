@@ -6,7 +6,8 @@ const regions = {
         'Aosta',
         2,
         10,
-        ['IT-21']
+        ['IT-21'],
+        5
     ),
     'IT-21': new Region(
         'Piemonte',
@@ -28,9 +29,17 @@ const regions = {
         'Milano',
         10,
         50,
-        ['IT-21'],
+        ['IT-21', 'IT-32'],
         15,
         3
+    ),
+    'IT-32': new Region(
+        'Sud Tirolo',
+        'Trento',
+        2,
+        10,
+        ['IT-25'],
+        5
     )
     /*
     sassonia: new Region(

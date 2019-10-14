@@ -14,7 +14,7 @@ const factions = {
     italy: new Faction(
         'Regno di Italia',
         characters.berengar,
-        ['IT-25'],
+        ['IT-25', 'IT-32'],
         //[regions.lombardy, regions.tuscia, regions.friuli, regions.romagna],
         'green'
     )
@@ -30,7 +30,11 @@ function createInterface(div, panel, human){
             <div style="width: 900px; height: 100%;">
                 ${map}
             </div>      
-            <div id="panel"><ul></ul></div>  
+            <div id="panel">
+                <ul>
+                    <li>Turn Start</li>
+                </ul>
+            </div>  
             <div class="bar">
                 <div class="info">
                     <span>Faction name: ${human.name}</span>
@@ -65,18 +69,18 @@ function createInterface(div, panel, human){
     function battleEvent(attacker, target) {
         let result = (attacker.troops + (Math.random()*10) - (target.troops * target.defence));
         if (result > 0){
-            target.troops = Math.round(attacker.troops - (target.troops/2));
+            target.troops = Math.round(attacker.troops - target.troops);
             if (target.troops < 0){
                 target.troops = 0;
             }
             attacker.troops = 0;
             return 'won'
         } else {
-            attacker.troops = Math.round(attacker.troops - (target.troops * (Math.random()*1)));
+            attacker.troops = Math.round(attacker.troops - target.troops);
             if (attacker.troops < 0){
                 attacker.troops = 0;
             }
-            target.troops = Math.round(target.troops - (attacker.troops * (Math.random()*1)));
+            target.troops = Math.round(attacker.troops - target.troops);
             return 'losed'
         }
     }
@@ -98,9 +102,10 @@ function createInterface(div, panel, human){
                     let current_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(target.id))[0];
                     let new_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(CURRENT_REGION))[0];
                     target.classList.remove(current_faction);
-                    factions[current_faction].provinces.filter(e => e !== target.id);
+                    factions[current_faction].provinces = factions[current_faction].provinces.filter(e => e !== target.id);
                     target.classList.add(new_faction);
                     factions[new_faction].provinces.push(target.id);
+                    console.log(current_faction);
                     console.log(factions[current_faction].provinces);
                 } else {
                     PANEL.innerHTML += `
@@ -124,9 +129,17 @@ function createInterface(div, panel, human){
             }, 2000);
         }
     }
-    function endTurnEvent() {
+    function endTurnEvent(arr) {
         Object.keys(factions).forEach(e => factions[e].get_income(regions));
-        document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
+        deleteColors(arr);
+        document.querySelector('.loading-modal').style.display = 'flex';
+        PANEL.innerHTML = '<li>Loading</li>';
+        setTimeout(() =>{
+            document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
+            PANEL.innerHTML = '<li>Turn Start</li>';
+            document.querySelector('.loading-modal').style.display = null;
+        }, 2000);
+
     }
     initializeMap();
     const mapPathRegions = document.querySelectorAll('path');
@@ -149,10 +162,16 @@ function createInterface(div, panel, human){
                 path.style.fill = 'blue';
                 checkNeighbours(path, mapPathRegions, regions, human);
                 PANEL.innerHTML += regions[CURRENT_REGION].render_panel_info();
-                document.querySelector('.raise-troops').addEventListener('click', () => {
-                    PANEL.innerHTML = regions[CURRENT_REGION].raise_troops(human);
-                    human.update_info_bar();
-                });
+                document.querySelectorAll('.region-action').forEach(e => e.addEventListener('click', () => {
+                    console.log(e);
+                    if (e.innerHTML == 'Raise Troops') {
+                        PANEL.innerHTML = regions[CURRENT_REGION].raise_troops(human);
+                        document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
+                    } else {
+                        PANEL.innerHTML = regions[CURRENT_REGION].incrase_defence(human);
+                        document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
+                    }
+                }));
             } else {
 
             }
@@ -168,7 +187,7 @@ function createInterface(div, panel, human){
         }, false);
     });
     document.querySelector('.end-turn').addEventListener('click', () =>{
-        endTurnEvent();
+        endTurnEvent(mapPathRegions);
     });
 }
 function selectFaction(faction, arr){

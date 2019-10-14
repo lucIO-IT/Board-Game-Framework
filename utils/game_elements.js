@@ -13,7 +13,7 @@ class Character {
 }
 
 class Region {
-    constructor(name, capital, income, pop, neighbours, troops=0, defence=0, structures=0){
+    constructor(name, capital, income, pop, neighbours, troops=0, defence=1, structures=1){
         this.name = name;
         this.capital = capital;
         this.income = income;
@@ -46,16 +46,27 @@ class Region {
             <li>Capital: ${this.capital}</li>
             <li>Troops: ${this.troops}</li>
             <li>Defence: ${this.defence}</li>
-            <li><button class="raise-troops">Raise Troops</button></li>
+            <li><button class="region-action">Raise Troops</button></li>
+            <li><button class="region-action">Incrase Defence</button></li>
         `;
     }
     raise_troops(faction){
         if (faction.money > 150){
             this.troops += 25;
             faction.money = faction.money - 150;
+            faction.update_info_bar();
             return `<li>25 troops raised in ${this.name}</li>`
         } else {
             return `<li>Treasury is not enough to raise troops</li>`
+        }
+    }
+    incrase_defence(faction){
+        if (faction.money > 250 && this.defence < 5){
+            this.defence += 1;
+            faction.money = faction.money - 250;
+            return `<li>Defence upgraded in ${this.name}</li>`
+        } else {
+            return `<li>Is not possible to upgrade defence of this province</li>`
         }
     }
 }
