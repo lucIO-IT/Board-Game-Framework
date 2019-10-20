@@ -15,7 +15,7 @@ const regions = {
         7,
         35,
         ['IT-23', 'IT-42', 'IT-25'],
-        35
+        235
     ),
     'IT-42': new Region(
         'Liguria',
