@@ -1,4 +1,4 @@
-//import {regions} from "./regions";
+
 
 class Character {
     constructor(name, age, married=false, sons=false, father){
@@ -25,21 +25,6 @@ class Region {
     }
 
     //methods
-    upgrade_defence(){
-        if (this.defence < 5){
-            this.defence += 1;
-        }
-    }
-    upgrade_structures(){
-        if (this.structures < 5){
-            this.structures += 1;
-        }
-    }
-    create_port(){
-        if(this.port = false){
-            this.port = true;
-        }
-    }
     render_panel_info(){
         return `
             <li>Province: ${this.name}</li>
@@ -72,7 +57,7 @@ class Region {
 }
 
 class Faction {
-    constructor(name, king, provinces, color, money=0, rank='?', human=false){
+    constructor(name, king, provinces, color, money=0, rank='?', human=false, mv_points=5){
         this.name = name;
         this.king = king;
         this.provinces = provinces; //factions is an array
@@ -80,6 +65,7 @@ class Faction {
         this.money = money;
         this.rank = rank;
         this.human = human;
+        this.mv_points = mv_points;
     }
 
     //methods
@@ -97,32 +83,37 @@ class Faction {
             <span>Treasury: ${this.money}</span>
         `;
     }
-    /*
-    get_faction_info(){
-        return `
-            The faction ${this.name} is ruled by ${this.king} and owns this provinces:
-            ${this.provinces.map(function(obj){return obj})}.
-            ${this.human ? `
-                Is controlled by human player.` 
-                : `Is controlled by AI.`
-            }
-        `
+    check_mv_points(){
+        return this.mv_points > 0;
     }
-    */
-    check_if_alive(){
-        if(this.king && this.provinces > 0){
-            return `${this.name} continues`
-        }
+    consume_mv_points(){
+        this.mv_points = this.mv_points - 1;
     }
-    show_culture_properties(){
-        return `This faction joined ${this.culture_type} culture and can do:
-            ...
-        `
+    update_mv_points(){
+        this.mv_points = 5;
     }
     get_income(regions){
         this.provinces.forEach(e => {
             this.money += Math.round(regions[e].income * (regions[e].population/10))
         });
+    }
+    faction_end_turn(regions){
+        this.get_income(regions);
+        this.update_mv_points();
+    }
+    /*acquireRegion(){
+        let current_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(target.id))[0];
+        let new_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(CURRENT_REGION))[0];
+        target.classList.remove(current_faction);
+        factions[current_faction].provinces = factions[current_faction].provinces.filter(e => e !== target.id);
+        target.classList.add(new_faction);
+        factions[new_faction].provinces.push(target.id);
+    }*/
+    acquireRegion(region){
+        this.provinces.push(region)
+    }
+    loseRegion(region){
+        this.provinces = this.provinces.filter(e => e !== region);
     }
 }
 

@@ -1,5 +1,4 @@
-import {Faction} from './game_elements.js';
-import {regions} from './regions.js';
+import {Faction} from './game_elements.js'; import {regions} from './regions.js';
 import {characters} from './characters.js';
 
 const factions = {

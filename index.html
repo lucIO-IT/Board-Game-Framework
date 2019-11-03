@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Gioco</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         html, body, #app {
             width: 100%;
             height: 100%;
@@ -30,6 +33,7 @@
             left: 0;
             height: 60px;
             width: 100%;
+            z-index: 1;
         }
         .bar span {
             display: inline-block;
@@ -44,6 +48,12 @@
             cursor: pointer;
             fill: rosybrown;
             transition: all 0.28s;
+            position: relative;
+        }
+        .path:after {
+            content: 'CIAOOO';
+            font-size: 18px;
+            position: absolute;
         }
         button {
             padding: 5px;
@@ -71,16 +81,34 @@
         .flex{
             display: flex;
         }
+        .panel {
+            display: block;
+            float: left;
+            height: 100%;
+            width: 15%;
+            background: gray;
+        }
+        .block-panel {
+            width: 70%;
+            background: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
     <div class="loading-modal">Loading</div>
-    <div id="app">
-        <h1>Welcome to my game</h1>
-        <hr/>
-        <h3>Select your Faction:</h3>
-        <ul id="factions_list"></ul>
+    <div class="panel"></div>
+    <div class="panel block-panel">
+        <div id="app">
+            <h1>Welcome to my game</h1>
+            <hr/>
+            <h3>Select your Faction:</h3>
+            <ul id="factions_list"></ul>
+        </div>
     </div>
+    <div class="panel"></div>
     <script type="module" src="utils/main.js"></script>
 </body>
 </html>

@@ -18,10 +18,13 @@ function main(){
     }));
 }
 
-if (document.querySelector('body').onload){
+window.onload = () => {
     console.log('Load complete list of factions: ' + Object.keys(factions));
     console.log('Load complete list of regions: ' + Object.keys(regions));
     main();
-}
+};
 
+window.onbeforeunload = () => {
+    alert('Are you sure to leave the page?')
+};
 
