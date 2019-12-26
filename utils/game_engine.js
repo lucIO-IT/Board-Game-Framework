@@ -3,7 +3,7 @@
 /* Utils */
 
 function deleteColors(arr) {
-    return arr.forEach(e=>e.style.fill=null)
+    return arr.forEach(e=>e.classList.remove('current', 'target-local', 'target-enemy'))
 }
 function getDialog(text=undefined){
     document.querySelector('.loading-modal').classList.toggle('flex');
@@ -20,6 +20,11 @@ class Map {
     }
     initializeMap(human, div, map=this.map) {
         return document.getElementById(div).innerHTML = `
+                <style>
+                    .current {fill: blue;}
+                    .target-local {fill: yellow;}
+                    .target-enemy {fill: red;}
+                </style>
                 <div class="panel"></div>
                 <div class="panel block-panel">
                     ${map}
@@ -46,56 +51,53 @@ class Map {
         document.querySelector('head').appendChild(style_sheet);
         Object.keys(factions).forEach(e=>style_sheet.innerHTML += ('\n.' + e + ' { fill: ' + factions[e].color + '; } \n'));
     }
-    addMapMethods(human, factions, regions, panel, events){
+    deleteColors() {
+        const mapPathRegions = document.querySelectorAll('path');
+        return mapPathRegions.forEach(e=>e.classList.remove('current', 'target-local', 'target-enemy'))
+    }
+    addMapMethods(human, factions, regions, panel_id, events, utils){
 
         console.log('Caricamento funzionalità della mappa')
-        
         const mapPathRegions = document.querySelectorAll('path');
-        const PANEL = document.getElementById(panel);
-        let CURRENT_REGION = '';
-
-        console.log(PANEL);
-
-        //Add Methods
-
-        mapPathRegions.forEach(path=>{
+        const panel = document.getElementById(panel_id);
+        const addAction = utils.addAction;
+        const endTurn = e => events.endTurn(mapPathRegions, human, panel);
+        
+        function addCSSClass(path) {
             path.classList.add('path');
             path.classList.remove('land');
             Object.keys(factions)
                 .filter(el => factions[el].provinces.includes(path.id) == true)
                 .forEach(el => path.classList.add(el));
-            path.addEventListener('click', () =>{
-                deleteColors(mapPathRegions);
-                CURRENT_REGION = path.id;
-                let get_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(path.id))[0];
-                console.log(get_faction);
-                PANEL.innerHTML = factions[get_faction].get_panel_info();
-                if (human.provinces.includes(path.id)){
-                    path.style.fill = 'blue';
-                    events.checkNeighbours(path, mapPathRegions, regions, human);
-                    PANEL.innerHTML += regions[CURRENT_REGION].render_panel_info();
-                    document.querySelectorAll('.region-action').forEach(e => e.addEventListener('click', () => {
-                        events.regionUpdate(e, CURRENT_REGION, human, PANEL);
-                    }));
-                }
-            });
-            path.addEventListener('contextmenu', ev => {
-                ev.preventDefault();
-                if (regions[CURRENT_REGION].troops > 0){
-                    if (human.check_mv_points() === true ){
-                        events.moveTroops(path, CURRENT_REGION, PANEL, events, human);
-                    } else {
-                        PANEL.innerHTML = 'No more movement points';
-                    }
-                } else {
-                    PANEL.innerHTML = 'There are no troops in this province';
-                }
+        }
+        function regionLeftClick(event){
+            deleteColors(mapPathRegions);
+            let path = event.target;
+            let region = path.id;
+            let region_faction = utils.getRegionFaction(region);
+            console.log(region_faction);
+            panel.innerHTML = factions[region_faction].get_panel_info();
+            function regionRightClick(event){
+                let path = event.target;   
+                event.preventDefault();
+                events.attackRegion(path, region, panel, events, human);
                 return false;
-            }, false);
-        });
-        document.querySelector('.end-turn').addEventListener('click', () =>{
-            events.endTurn(mapPathRegions, human, PANEL);
-        });
+            }
+            if (human.provinces.includes(region)){
+                path.classList.add('current');
+                events.checkNeighbours(path, mapPathRegions, regions, human);
+                panel.innerHTML += regions[region].render_panel_info();
+                document.querySelectorAll('.region-action').forEach(e => e.addEventListener('click', () => {
+                    events.regionUpdate(e, region, human, panel);
+                }));
+                addAction('path', regionRightClick, 'contextmenu');
+            }
+        }
+
+        //Add Methods
+        addAction('path', addCSSClass);
+        addAction('path', regionLeftClick, 'click');        
+        addAction('.end-turn', endTurn, 'click');
     }
 }
 
@@ -105,27 +107,48 @@ class GameEngine {
         this.div = div;
         this.panel = panel;
         this.factions = factions;
-        this.regions = regions;
+        this.regions = regions;        
+        this.utils = {
+            deleteColors: (arr) => {
+                return arr.forEach(e=>e.style.fill=null)
+            },
+            getDialog: (text=undefined) => {
+                document.querySelector('.loading-modal').classList.toggle('flex');
+                if (text) {
+                    document.querySelector('.loading-modal').innerHTML = text;
+                }
+            },
+            getRegionFaction: (region) => {
+                return Object.keys(factions).filter(e => factions[e].provinces.includes(region))[0];
+            },
+            addAction: (cls, action, pointer) => {
+                const els = document.querySelectorAll(cls);
+                if (pointer != null){
+                    els.forEach(ev => ev.addEventListener(pointer, action), false);
+                } else {
+                    els.forEach(e => action(e));
+                }    
+            }
+        };
         this.events = {
-            endTurn: (arr, human, PANEL) => {
+            endTurn: (arr, human, panel) => {
                 Object.keys(factions).forEach(e => factions[e].faction_end_turn(regions));
                 deleteColors(arr);
                 getDialog('loading');
-                PANEL.innerHTML = '<li>Loading</li>';
+                panel.innerHTML = '<li>Loading</li>';
                 setTimeout(() =>{
                     document.querySelector('.bar').querySelector('.info').innerHTML = human.update_info_bar();
                     getDialog();
-                    PANEL.innerHTML = '<li>Turn Start</li>';
+                    panel.innerHTML = '<li>Turn Start</li>';
                 }, 2000);
-
             },
             checkNeighbours: (path, arr, regions, human) => {
                 arr.forEach(e => {
                     if (regions[path.id].neighbours.includes(e.id)){
                         if (human.provinces.includes(e.id)){
-                            e.style.fill = 'yellow';
+                            e.classList.add('target-local');
                         } else {
-                            e.style.fill = 'red';
+                            e.classList.add('target-enemy');
                         }
                     }
                 });
@@ -181,7 +204,8 @@ class GameEngine {
             moveTroops: (target, current, panel, events, human) => {
                 let t_reg = regions[target.id]; //Target Region
                 let f_reg = regions[current]; //Current Region Selected
-                if (target.style.fill == 'red'){
+                const mapPathRegions = document.querySelectorAll('path');                
+                if (target.classList.contains('target-enemy')){
                     panel.innerHTML = `
                         Attack region ${t_reg.name} from ${f_reg.name}
                         with ${f_reg.troops} troops
@@ -200,11 +224,11 @@ class GameEngine {
                                 \nTroops remained ${f_reg.troops}
                             `;
                         }
-                        target.style.fill = null;
+                        deleteColors(mapPathRegions);
                         target.style.opacity = null;
                     }, 2000);
                 }
-                if (target.style.fill == 'yellow'){
+                if (target.classList.contains('target-local')){
                     panel.innerHTML = `
                         Move ${f_reg.troops} troops from from ${f_reg.name}
                         to ${t_reg.name}
@@ -216,7 +240,22 @@ class GameEngine {
                         target.style.opacity = null;
                     }, 2000);
                 }
-                human.consume_mv_points();
+            },
+            attackRegion: (path, current_region, panel, events, human) => {
+                const mover = factions[this.utils.getRegionFaction(current_region)];
+                console.log('Tst');
+                console.log(mover.name);
+                console.log(mover.check_mv_points());
+                if (regions[current_region].troops > 0){                
+                    if (mover.check_mv_points() === true ){
+                        events.moveTroops(path, current_region, panel, events, human);
+                        mover.consume_mv_points();
+                    } else {
+                        panel.innerHTML = 'No more movement points';
+                    }
+                } else {
+                    panel.innerHTML = 'There are no troops in this province';
+                }
             },
             regionUpdate: (elem, current, human, panel)=> {
                 if (elem.innerHTML == 'Raise Troops') {
@@ -229,10 +268,10 @@ class GameEngine {
             }
         };
     }
-    createInterface(map, div, panel, human, factions, regions, events=this.events){        
+    createInterface(map, div, panel, human, factions, regions, events=this.events, utils=this.utils){        
         map.initializeMap(human, div);
         map.createCSSClass(factions);
-        map.addMapMethods(human, factions, regions, panel, events);
+        map.addMapMethods(human, factions, regions, panel, events, utils);
     }
     selectFaction(faction){
         Object.keys(this.factions).filter(e => e === faction).forEach(e=>{
