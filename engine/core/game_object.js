@@ -1,16 +1,56 @@
-import {DataModel} from './core.js';
-
-class GameObject extends DataModel {
+class GameObject extends HTMLElement {
 
     constructor(args){
-        super(args);
-        this.name = args.name;
-        this.src = args.src;
-        this.css_class = args.cls;
-        this.width = args.width;
-        this.height = args.height;
-        this.actions = args.actions;
-        this.selectable = args.selectable;
+        super()
+        this.shadow = this.attachShadow({mode: 'open'});          
+    }
+
+    ajaxTemplateLoad(f, div, val, url){
+        var xhr;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+         } else {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }        
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {   
+                f(div, xhr.responseText, val);
+            }   
+        };      
+        xhr.open('GET', url);
+        xhr.send();  
+    }
+
+    load_template(div, template, shadow){        
+        div.innerHTML = template;
+        shadow.appendChild(div);
+    }
+
+    moveSelf(element){
+        element.addEventListener('click', () => {
+            const obj = element;
+            console.log('check');
+            obj.parentNode.addEventListener('contextmenu', () => {
+                event.preventDefault();
+                obj.style.top =event.clientY + 'px';
+                obj.style.left = event.clientX + 'px';
+                return false
+            });           
+        });
+    }
+
+    connectedCallback(){
+        const div = document.createElement('div');
+        this.style.position = 'absolute';
+        this.style.top = '0';
+        this.style.left = '0';
+        div.style.width = `${this.getAttribute('width')}px`;
+        div.style.height = `${this.getAttribute('height')}px`;
+        this.style.margin = '15px';
+        div.style.background = `url("${this.getAttribute('src')}") no-repeat`;        
+        div.style.backgroundSize = 'contain, cover';
+        this.ajaxTemplateLoad(this.load_template, div, this.shadow, 'engine/core/templates/game_object.html');
+        this.moveSelf(this);
     }
 
     registerActions(args){
@@ -24,46 +64,16 @@ class GameObject extends DataModel {
         });
     }
 
-    __name__(){
-        return this.name;
-    }
-
-    __addCustomEvents__(){
-        const elems = Array.from(document.getElementsByClassName(this.css_class));
-        const addEvent = name => {
-            const nuEvent = new CustomEvent(name, {
-                bubbles: true,
-                cancelable: true,
-                detail: {
-                    obj: this
-                }
-            });
-            document.body.dispatchEvent(nuEvent);
-        };
-        elems.forEach(e => e.addEventListener('click', () => {
-            const event_name = `objectSelected`;
-            addEvent(event_name);
-        }, false));
-        elems.forEach(e => e.addEventListener('contextmenu', () => {
-            event.preventDefault();
-            const event_name = `objectIsTarget`;
-            addEvent(event_name);
-        }, false));
-    }
-
-    __render__(target_id){
-        const gO = document.createElement('DIV');
-        gO.id = this.__getId__();
-        gO.style = `width:${this.width}; height:${this.height};`;
-        gO.classList.add(this.css_class);
-        gO.innerHTML = `${this.src}`;
-        document.getElementById(target_id).appendChild(gO);
-        this.registerActions(this.actions);
-        if (this.selectable){
-            this.__addCustomEvents__();
-        }
+    static __render__(name, target, args){        
+        let el = document.createElement(name);
+        Object.keys(args).forEach(key => {
+            el.setAttribute(key) = args[key];
+        });
+        target.appendChild(el);
     }
 
 }
+
+customElements.define('game-object', GameObject)
 
 export {GameObject};
