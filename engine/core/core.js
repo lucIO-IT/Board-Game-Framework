@@ -61,8 +61,8 @@ class DataModel {
         return this.proxy;
     }
 
-    __detail__(){
-        return `<div>${Object.keys(this.proxy).map(key => "<p>" + this.proxy[key] + "</p>").join(" ")}</div>`;
+    __detailString__(){
+        return `${Object.keys(this.proxy).map(key => `${key}: ${this.proxy[key]}`).join("\n")}`;
     }
 
     __update__(args){
