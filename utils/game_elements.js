@@ -1,5 +1,3 @@
-
-
 class Character {
     constructor(name, age, married=false, sons=false, father){
         this.name = name;

@@ -1,8 +1,8 @@
-import {regions} from './regions.js';
-import {characters} from './characters.js';
-import {map} from './map.js'
-import {factions} from "./factions.js";
-import {GameEngine} from "./game_engine.js";
+import {regions} from './utils/regions.js';
+import {characters} from './utils/characters.js';
+import {map} from './utils/map.js'
+import {factions} from "./utils/factions.js";
+import {GameEngine} from "./utils/game_engine.js";
 
 function main(){
     document.getElementById('factions_list').innerHTML += `
