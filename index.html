@@ -1,123 +1,216 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gioco</title>
+    <title>Title</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        html, body, #app {
+        .img-background {
+            object-fit: cover;
             width: 100%;
-            height: 100%;
-            border: 0;
-            padding: 0;
-            margin: 0;
+            height: auto;
         }
-        svg {
-            width: 100%;
-            height: 100%;
+        h1 {
+            color: green;
         }
-        #panel {
-            /*position: fixed;
-            top: 0;
-            right: 0;
-            border: 1px solid black;
-            padding: 15px;
-            margin: 10px;*/
+        div {
+background-color: saddlebrown;
+
         }
-        .bar {
-            background: rgb(225,215,205);
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            height: 60px;
-            width: 100%;
-            z-index: 1;
-        }
-        .bar span {
-            display: inline-block;
-            padding: 18px;
-        }
-        .canvas-container {
-            display: flex;
-            justify-content: center;
-        }
-        .path {
-            pointer-events: all;
-            cursor: pointer;
-            fill: rosybrown;
-            transition: all 0.28s;
+        .map {
             position: relative;
-        }
-        .path:after {
-            content: 'CIAOOO';
-            font-size: 18px;
-            position: absolute;
-        }
-        button {
-            padding: 5px;
-            border: 0.5px solid black;
-            cursor: pointer;
-        }
-        .end-turn {
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin: 15px;
-        }
-        .loading-modal{
-            display: none;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 10;
-        }
-        .flex{
-            display: flex;
-        }
-        .panel {
-            display: block;
-            float: left;
-            height: 100%;
-            width: 20%;
-            background: gray;
-        }
-        .block-panel {
-            width: 60%;
-            background: white;
+            background-color: seagreen;
+            width: 800px;
+            height: 400px;
             padding: 10px;
-            display: flex;
-            justify-content: center;
         }
-        .panel ul {
-            margin: 0;
-            padding: 0;
+
+        * {
+            transition: all 0.95s;
         }
-        .panel ul li {
-            display: inline-block;
-            float: left;
-            padding: 15px;
-            min-width: 50%;
-            height: 45px;
-            border: 1px solid gray;
-            color: white;
-        }
+
+
+
     </style>
 </head>
 <body>
-    <div class="loading-modal">Loading</div>
-    <div id="app">
-        <h1>Welcome to my game</h1>
-        <hr/>
-        <h3>Select your Faction:</h3>
-        <ul id="factions_list"></ul>
-    </div>
-    <script type="module" src="utils/main.js"></script>
+<div id="app"></div>
+<div class="map">
+    <game-object width="100" height="100" src="sc/flags/ad.png"></game-object>
+</div>
+
+
+<!--
+<script type="module" src="prova.js"></script>    
+-->
+<script type="module" src="prova2.js"></script>
+<!--
+<script>
+const objF = (o,f) => Object.keys(o).filter(f);
+const objK = (o,f) => Object.keys(o).forEach(f);
+const objL = o => Object.keys(o).length;
+class DataModel {
+    constructor(...restArgs) {
+        this.args = this.__checkData__(restArgs);
+        this.token = Math.random().toString(36).substr(2);
+    }
+
+    __checkData__(a){
+        const args = Array.from(a)[0];
+        if (!args.name){
+            throw 'Attention: name is not defined';
+        } else {
+            return args;
+        }
+    }
+
+    __name__(){
+        return this.args.name;
+    }
+
+    __cleanName__(){
+        //Clean special characters from name att
+        return this.__name__().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+    }
+
+    __getId__(){
+        //Return obj ID
+        return `${this.__cleanName__()}_${this.token}`;
+    }
+
+    __saveItem__(){
+        //Create and Overwrite JSON item in localStorage
+        const data = JSON.stringify(this.args);
+        const id = this.__getId__();
+        localStorage.setItem(id, data);
+    }
+
+    __loadItem__(){
+        //Load item as JSON from localStorage
+        const id = this.__getId__();
+        return localStorage.getItem(id);
+    }
+
+    __deleteItem__(){
+        //Delete item from localStorage
+        const id = this.__getId__();
+        localStorage.removeItem(id);
+    }
+
+    static __loadDB__(){
+        return window.localStorage;
+    }
+
+}
+
+class Region extends DataModel {
+    constructor(args){
+        super(args);
+    }
+}
+
+let r = new Region({
+    name: 'prova',
+    color: 'rgb(88,88,88)',
+    leader: {
+        name: 'Otto',
+        age: 38,
+        sons: ['Lukas']
+    }
+});
+
+objK(DataModel.__loadDB__(), e => localStorage.removeItem(e));
+console.log(DataModel.__loadDB__());
+
+/*
+class GameModel {
+
+    constructor(name, src, cls, actions, width='0', height='0'){
+        this.name = name;
+        this.src = src;
+        this.css_class = cls;
+        this.width = width;
+        this.height = height;
+        this.actions = actions;
+    }
+
+    registerActions(args){
+        args.forEach(arg => {
+            let els = Array.from(document.getElementsByClassName(arg.cls));
+            if (arg.pointer){
+                els.forEach(ev => ev.addEventListener(arg.pointer, arg.action), false);
+            } else {
+                els.forEach(e => arg.action(e));
+            }
+        });
+    }
+
+    __init__(){
+        return this.name;
+    }
+
+    __render__(target){
+        const gm = document.createElement('DIV');
+        gm.id = this.name;
+        gm.style = `width:${this.width}; height:${this.height};`;
+        gm.classList.add(this.css_class);
+        gm.innerHTML = `<img class="img-background" src="${this.src}"/>`;
+        document.querySelector(target).appendChild(gm);
+        this.registerActions(this.actions);
+    }
+}
+
+const g_actions = [{
+        cls: 'gabbiano',
+        pointer: 'click',
+        action: (e, self) => console.log(`${e.target} ${this}`)
+    }
+];
+
+let Node = new GameModel('prova', 'images.jpg', 'gabbiano', g_actions, width='60px', height='60px')
+Node.__init__();
+//Node.__render__();
+console.log(Node.actions);
+
+class GameMap extends GameModel {
+    constructor(name, src, cls, actions, width='100%', height='100%'){
+        super(name, src, cls, actions, width, height);
+    }
+}
+
+let Map = new GameMap('prova', 'images.jpg', 'gabbiano', g_actions)
+Map.__render__('#ciao');
+Map.__init__();
+
+class PlayerModel {
+    constructor(name, human=false, score=0){
+        this.name = name;
+        this.human = human;
+        this.score = score;
+    }
+
+    __init__(){
+        return this.name;
+    }
+
+    __playerType__(){
+        if (this.human){
+            return 'is human player';
+        } else {
+            return 'is ia player';
+        }
+    }
+
+    __render__(){
+        return `${this.__init__()} ${this.__playerType__()} and has score: ${this.score}`;
+    }
+
+}
+
+let PM = new PlayerModel('alb');
+console.log(PM.__render__());
+*/
+</script>
+-->
+
 </body>
 </html>
