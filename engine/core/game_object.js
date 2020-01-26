@@ -1,59 +1,35 @@
-class GameObject extends HTMLElement {
+class GameObject {
 
     constructor(args){
-        super()
-        this.shadow = this.attachShadow({mode: 'open'});          
+        this.name = args.name;
+        this.template = args.template;
+        this.width = args.width;
+        this.height = args.height;
+        this.actions = args.actions;
+        this.__render__(args.target_id);
     }
-
-    ajaxTemplateLoad(f, div, val, url){
+    
+    __ajaxTemplateLoad__(f, div, url){
         var xhr;
         if (window.XMLHttpRequest) {
             xhr = new XMLHttpRequest();
          } else {
             xhr = new ActiveXObject("Microsoft.XMLHTTP");
-        }        
+        }
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {   
-                f(div, xhr.responseText, val);
-            }   
-        };      
+            if (xhr.readyState === 4) {
+                f(div, xhr.responseText);
+            }
+        };
         xhr.open('GET', url);
-        xhr.send();  
+        xhr.send();
     }
 
-    load_template(div, template, shadow){        
+    __load_template__(div, template){
         div.innerHTML = template;
-        shadow.appendChild(div);
     }
 
-    moveSelf(element){
-        element.addEventListener('click', () => {
-            const obj = element;
-            console.log('check');
-            obj.parentNode.addEventListener('contextmenu', () => {
-                event.preventDefault();
-                obj.style.top =event.clientY + 'px';
-                obj.style.left = event.clientX + 'px';
-                return false
-            });           
-        });
-    }
-
-    connectedCallback(){
-        const div = document.createElement('div');
-        this.style.position = 'absolute';
-        this.style.top = '0';
-        this.style.left = '0';
-        div.style.width = `${this.getAttribute('width')}px`;
-        div.style.height = `${this.getAttribute('height')}px`;
-        this.style.margin = '15px';
-        div.style.background = `url("${this.getAttribute('src')}") no-repeat`;        
-        div.style.backgroundSize = 'contain, cover';
-        this.ajaxTemplateLoad(this.load_template, div, this.shadow, 'engine/core/templates/game_object.html');
-        this.moveSelf(this);
-    }
-
-    registerActions(args){
+    __registerActions__(args){
         args.forEach(arg => {
             let els = Array.from(document.getElementsByClassName(arg.cls));
             if (arg.pointer){
@@ -64,16 +40,16 @@ class GameObject extends HTMLElement {
         });
     }
 
-    static __render__(name, target, args){        
-        let el = document.createElement(name);
-        Object.keys(args).forEach(key => {
-            el.setAttribute(key) = args[key];
-        });
-        target.appendChild(el);
+    __render__(target_id){
+        const go = document.createElement('DIV');
+        go.id = this.__getId__();
+        go.style = `width:${this.width}; height:${this.height};`;
+        go.classList.add(this.css_class);
+        go.innerHTML = this.__ajaxTemplateLoad__(this.__load_template__, go, this.template);
+        document.getElementById(target_id).appendChild(go);
+        this.registerActions(this.actions);
     }
 
 }
-
-customElements.define('game-object', GameObject)
 
 export {GameObject};
