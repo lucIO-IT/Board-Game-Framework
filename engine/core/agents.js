@@ -48,6 +48,9 @@ const template = `
     </style>
     <input id="check" type="checkbox" hidden/>
     <label for="check"></label>
+    <script>
+        document.querySelector('#check').onclick = alert('ciao');
+    </script>
 `;
 
 class Agent extends GameElement {
@@ -88,11 +91,3 @@ class Agent extends GameElement {
 }
 
 customElements.define('game-agent', Agent)
-const app = document.querySelector('#map');
-GameElement.renderElement('game-agent', app, {
-    width: '50',
-    height: '50',
-    src: 'sc/soldier.png',
-    transition: '0.95'
-});
-console.log(document.querySelector('game-agent').isConnected)

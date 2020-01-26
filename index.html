@@ -6,12 +6,15 @@
 </head>
 <body>
 <div id="app"></div>
-<game-map></game-map>
+<game-map width="700" height="550">
+    <game-agent width="35" height="35" src="sc/soldier.png" transition="0.95"></game-agent>
+</game-map>
 
 
 <!--
 <script type="module" src="prova.js"></script>    
 -->
+<script type="module" src="engine/core/agents.js"></script>
 <script type="module" src="engine/core/game_map.js"></script>
 <!--
 <script>

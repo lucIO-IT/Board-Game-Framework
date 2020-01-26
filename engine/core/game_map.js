@@ -4,7 +4,7 @@ import {draggableScroll} from './utils/draggable_scroll.js';
 class GameMap extends GameElement {
     constructor(){
         super();
-        this.template = 'engine/core/templates/map.html';
+        this.template_url = 'engine/core/templates/map.html';
     }
 
     __loadRegionsfaction__(){
@@ -48,30 +48,13 @@ class GameMap extends GameElement {
     }
 
     __load_template__(div, template){
-        const container = document.createElement('div');
-        container.innerHTML =template;
-        div.appendChild(container);
+        div.innerHTML = template;
     }
 
     __registerCode__(div){
         const self = this;
-        self.__ajaxTemplateLoad__(self.__load_template__, div, self.template);
+        self.__ajaxTemplateLoad__(self.__load_template__, div, self.template_url);
         draggableScroll(div);
-        function getDim(){
-            const svg = self.shadow.querySelectorAll('*');
-            console.log(svg);
-            const w = svg.width;
-            const h = svg.height;
-            return {width: w, height: h}
-        }
-        function addDim(){
-            const d = self.querySelector('.map-container');
-            const args = getDim();
-            Object.keys(args).forEach(key => {
-                d.setAttribute(key, args['key'])
-            });
-        }
-        addDim();
         self.__loadRegionsfaction__();
 
     }

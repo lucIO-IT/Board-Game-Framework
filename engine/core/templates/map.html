@@ -1,10 +1,31 @@
 <style>
     .map-container {
-        width: 950px
-        height: 620px
+        width: 600px;
+        height: 450px;
+        overflow: hidden;
+        background: green;
     }
+    .map-wrapper {
+        position: relative;
+    }
+
+    label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 20px;
+        z-index: 2;
+    }
+
+    #zoom-checkbox:checked + div * {
+        width: 200%;
+        height: 200%;
+    }
+
 </style>
-<div class="map-container">
+<label for="zoom-checkbox">🔎</label>
+<input id="zoom-checkbox" type="checkbox" class="zoom-btn" hidden/>
+<div class="map-wrapper">
     <svg
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:cc="http://creativecommons.org/ns#"
@@ -731,5 +752,12 @@
     </svg>
     <slot></slot>
 </div>
-<input id="zoom-checkbox" type="checkbox" class="zoom-btn" hidden/>
-<label for="zoom-checkbox">🔎</label>
+
+<!--
+<script src="../utils/draggable_scroll.js"></script>
+-->
+<script>
+    const div = document.querySelector('.map-container');
+    //draggableScroll(div);
+    div.onclick = alert('ciao');
+</script>
