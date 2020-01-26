@@ -3,46 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        .img-background {
-            object-fit: cover;
-            width: 100%;
-            height: auto;
-        }
-        h1 {
-            color: green;
-        }
-        div {
-background-color: saddlebrown;
-
-        }
-        .map {
-            position: relative;
-            background-color: seagreen;
-            width: 800px;
-            height: 400px;
-            padding: 10px;
-        }
-
-        * {
-            transition: all 0.95s;
-        }
-
-
-
-    </style>
 </head>
 <body>
 <div id="app"></div>
-<div class="map">
-    <game-object width="100" height="100" src="sc/flags/ad.png"></game-object>
-</div>
+<game-map></game-map>
 
 
 <!--
 <script type="module" src="prova.js"></script>    
 -->
-<script type="module" src="prova2.js"></script>
+<script type="module" src="engine/core/game_map.js"></script>
 <!--
 <script>
 const objF = (o,f) => Object.keys(o).filter(f);
