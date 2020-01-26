@@ -96,4 +96,44 @@ class DataModel {
 
 }
 
-export {DataModel};
+class GameElement extends HTMLElement {
+
+    constructor(){
+        super()
+        this.shadow = this.attachShadow({mode: 'open'});
+        this.template = 'insert content';
+    }
+
+    connectedCallback(){
+        this.style.top = '0';
+        this.style.left = '0';
+        const div = document.createElement('div');
+        div.style.width = `${this.getAttribute('width')}px`;
+        div.style.height = `${this.getAttribute('height')}px`;
+        div.style.overflow = 'hidden';
+        div.innerHTML = this.template;
+        this.shadow.appendChild(div);
+        this.__registerCode__(div);
+    }
+
+    querySelector(x){
+        const s = this.shadow;
+        return s.querySelector(x)
+    }
+
+    __registerCode__(div){
+        //custom code here
+        console.log('no actions');
+    }
+
+    static renderElement(name, target, args){
+        let el = document.createElement(name);
+        Object.keys(args).forEach(key => {
+            el.setAttribute(key, args[key]);
+        });
+        target.appendChild(el);
+    }
+
+}
+
+export {DataModel, GameElement};

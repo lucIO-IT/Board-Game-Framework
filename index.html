@@ -4,45 +4,51 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        .img-background {
-            object-fit: cover;
-            width: 100%;
-            height: auto;
-        }
-        h1 {
-            color: green;
-        }
         div {
-background-color: saddlebrown;
-
+            overflow: hidden;
         }
-        .map {
+
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
             position: relative;
-            background-color: seagreen;
-            width: 800px;
-            height: 400px;
-            padding: 10px;
         }
 
-        * {
-            transition: all 0.95s;
+        .panel {
+            width: 25%;
+            height: 100%;
+            float: left;
         }
 
-
+        .bigger {
+            width: 50%;
+        }
 
     </style>
 </head>
 <body>
-<div id="app"></div>
-<div class="map">
-    <game-object width="100" height="100" src="sc/flags/ad.png"></game-object>
+<div class="panel"></div>
+<div class="panel bigger">
+    <game-map id="map" width="700" height="400" style="position: relative;"></game-map>
 </div>
-
+<div class="panel"></div>
 
 <!--
-<script type="module" src="prova.js"></script>    
+<div class="container">
+    <game-agent width="50" height="50" src="sc/soldier.png" transition="0.95"></game-agent>
+</div>
 -->
+
+<script src="engine/core/core.js" type="module"></script>
+<script src="engine/core/agents.js" type="module"></script>
+<script src="engine/core/game_map.js" type="module"></script>
+<!--
+<script type="module" src="prova.js"></script>    
+
 <script type="module" src="prova2.js"></script>
+-->
 <!--
 <script>
 const objF = (o,f) => Object.keys(o).filter(f);
