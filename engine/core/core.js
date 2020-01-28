@@ -40,6 +40,11 @@ class DataModel {
         }
     }
 
+    __check_arg__(arg){
+        // Integer fields are 0 if not defined in constructor
+        return (arg) ? arg : 0
+    }
+
     __checkID__(data_arg){
         const args = Array.from(data_arg)[0];
         if (!args.id){
@@ -101,7 +106,29 @@ class GameElement extends HTMLElement {
     constructor(){
         super()
         this.shadow = this.attachShadow({mode: 'open'});
+        this.template_url = false;
         this.template = 'insert content';
+    }
+
+    __ajaxTemplateLoad__(f, div, shadow, url){
+        var xhr;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+         } else {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                f(div, shadow, xhr.responseText);
+            }
+        };
+        xhr.open('GET', url);
+        xhr.send();
+    }
+
+    __load_template__(div, shadow, response){
+        div.innerHTML = response;
+        shadow.appendChild(div);
     }
 
     connectedCallback(){
@@ -111,8 +138,12 @@ class GameElement extends HTMLElement {
         div.style.width = `${this.getAttribute('width')}px`;
         div.style.height = `${this.getAttribute('height')}px`;
         div.style.overflow = 'hidden';
-        div.innerHTML = this.template;
-        this.shadow.appendChild(div);
+        if (this.template_url){
+            this.__ajaxTemplateLoad__(this.__load_template__, div, this.shadow, this.template_url)
+        } else {
+            div.innerHTML = this.template;
+            this.shadow.appendChild(div);
+        }
         this.__registerCode__(div);
     }
 
