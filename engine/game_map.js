@@ -10,6 +10,13 @@ class GameMap extends GameElement {
         this.template_url = 'engine/core/templates/map.html';
     }
 
+    __panelInfo__(info){
+        const panel = document.querySelector('panel-info');
+        panel.setAttribute('content', info.content);
+        panel.setAttribute('url', info.image);
+        panel.style.display = 'block';
+    }
+
     __loadRegionsfaction__(div){
         console.log('Start load factions list');
         const paths = div.querySelectorAll('path');
@@ -19,7 +26,10 @@ class GameMap extends GameElement {
                     //path.classList.add(this.factions[faction].name);
                     path.setAttribute('style', 'fill: ' + this.factions[faction].color + ';');
                     path.addEventListener('click', event => {
-                        console.log(event.target.id);
+                        this.__panelInfo__({
+                            content: regions[event.target.id].get_panel_info(),
+                            image: regions[event.target.id].get_terrain()
+                        });
                         let handler = event => {
                             event.preventDefault();
                             console.log(event.target.id)
@@ -40,8 +50,6 @@ class GameMap extends GameElement {
             this.shadow.appendChild(div);
         }
         setTimeout(f, 500)
-
-
     }
 }
 

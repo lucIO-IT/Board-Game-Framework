@@ -64,18 +64,20 @@ class Region extends DataModel {
         this.troops = this.__check_arg__(args.troops);
         this.defence = this.__check_arg__(args.defence);
         this.structures = this.__check_arg__(args.structures);
+        this.terrain_image_url = args.image;
     }
 
     //methods
-    render_panel_info(){
+    get_panel_info(){
         return `
             <li>Province: ${this.name}</li>
             <li>Capital: ${this.capital}</li>
             <li>Troops: ${this.troops}</li>
             <li>Defence: ${this.defence}</li>
-            <li><button class="region-action">Raise Troops</button></li>
-            <li><button class="region-action">Incrase Defence</button></li>
         `;
+    }
+    get_terrain(){
+        return `${this.terrain_image_url}`;
     }
     raise_troops(faction){
         if (faction.money > 50){

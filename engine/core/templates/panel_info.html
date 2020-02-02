@@ -1,0 +1,113 @@
+<style>
+    .panel-info {
+        width: 0;
+        transition: width 0.4s;
+        border: 1px solid beige;        
+        background-image: url('sc/panel_texture.jpg');
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
+        box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -webkit-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -moz-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        font-family: fantasy;
+        font-size: 15px;
+        font-weight: bolder;
+    }
+
+    .panel-info .body div {
+        padding: 10px;
+
+    }
+
+    .panel-info .content figure {
+        margin: 0;
+        padding: 0;
+    }
+
+    .panel-info .content figure img {
+        width: 100%;
+    }
+
+    .panel-info .content ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    .panel-info .content ul li {
+        display: block;
+        padding: 5px;
+    }
+
+    .panel-info .footer {
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .panel-info .footer button {
+        display: block;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -webkit-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -moz-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        border: 0;
+        cursor: pointer;
+        outline: none;
+    } 
+
+    .helm {
+        background: url('sc/widgets/helm.png') no-repeat;
+        background-size: contain, cover;
+    }
+
+    .castle {
+        background: url('sc/widgets/castle.png') no-repeat;
+        background-size: contain, cover;
+    }
+
+    .close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        float: right;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -webkit-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        -moz-box-shadow: 0px 3px 5px rgba(55,55,55,0.25);
+        background-color:crimson;
+        color: gold;
+        cursor: pointer;        
+        font-size: 19px;
+        font-weight: bolder;
+    }
+</style>
+<div class="panel-info">
+    <div class="body">
+        <div class="header">
+            <span class="close-btn" onclick="document.querySelector('panel-info').style.display = 'none'">&times;</span>
+        </div>
+        <div class="content">
+            <figure>
+                <img id="terrain-image" src="sc/terrains/terrain.jpg" />
+            </figure>            
+            <ul>
+                ...insert content here
+            </ul>            
+        </div>
+        <div class="footer">        
+            <button title="Raise Troops" class="helm"></button>
+            <button title="Incrase Defence" class="castle"></button>
+        </div>
+    </div>
+</div>

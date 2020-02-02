@@ -11,7 +11,8 @@ const regions = {
         garrison: 50,
         troops: 50,
         defence: 1,
-        structures: 1
+        structures: 1,
+        image: 'sc/terrains/terrain.jpg'
     }),
     'IT-21': new Region({
         name: 'Piemonte',
@@ -23,7 +24,8 @@ const regions = {
         garrison: 50,
         troops: 50,
         defence: 1,
-        structures: 1
+        structures: 1,
+        image: 'sc/terrains/terrain.jpg'
     }),
     'IT-42': new Region({
         name: 'Liguria',
@@ -35,7 +37,8 @@ const regions = {
         garrison: 50,
         troops: 50,
         defence: 1,
-        structures: 1
+        structures: 1,
+        image: 'sc/terrains/terrain.jpg'
     }),
     'IT-25': new Region({
         name: 'Lombardia',
@@ -47,7 +50,8 @@ const regions = {
         garrison: 50,
         troops: 50,
         defence: 1,
-        structures: 1
+        structures: 1,
+        image: 'sc/terrains/terrain.jpg'
     }),
     'IT-32': new Region({
         name: 'Sud Tirolo',
@@ -59,7 +63,8 @@ const regions = {
         garrison: 50,
         troops: 50,
         defence: 1,
-        structures: 1
+        structures: 1,
+        image: 'sc/terrains/terrain.jpg'
     })
 };
 

@@ -3,18 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        html, body, .main {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        game-map {
+            position: absolute;
+            top: 0;
+            left: 25%;
+            margin: 20px;
+            border: 3px solid black;
+            border-radius: 3%;
+            -webkit-border-radius: 3%;
+            -moz-border-radius: 3%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .panel {
+            width: 250px;
+            height: 100%;
+            background-color: antiquewhite;
+        }
+
+        .ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .ul li {
+            padding: 0;
+            margin: 0;
+        }
+
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .box {
+            padding: 20px;
+        }
+
+    </style>
 </head>
 <body>
 <div id="app"></div>
-<game-map width="700" height="550">
-    <game-agent width="35" height="35" src="sc/soldier.png" transition="0.95"></game-agent>
-</game-map>
+<div class="main">
+    <game-map width="650" height="500">
+        <panel-info 
+            width="250" 
+            slot="panel-info" 
+            content="
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            " 
+            url="" 
+            style="display: none;">
+        </panel-info>
+    </game-map>
+    <div class="panel left">
+        <div class="box">
+            <ul class="ul">
+                <li>ciao</li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel right">
+        <div id="message-panel" class="box">
+            
+        </div>
+    </div>
+</div>
+
+
 
 
 <!--
 <script type="module" src="prova.js"></script>    
 -->
-<script type="module" src="engine/core/agents.js"></script>
+<script type="module" src="engine/core/widgets.js"></script>
 <script type="module" src="engine/game_map.js"></script>
 <!--
 <script>

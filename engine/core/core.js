@@ -132,8 +132,8 @@ class GameElement extends HTMLElement {
     }
 
     connectedCallback(){
-        this.style.top = '0';
-        this.style.left = '0';
+        /*this.style.top = '0';
+        this.style.left = '0';*/
         const div = document.createElement('div');
         div.style.width = `${this.getAttribute('width')}px`;
         div.style.height = `${this.getAttribute('height')}px`;
