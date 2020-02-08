@@ -1,0 +1,106 @@
+<style>
+    div {
+        background-image: url('sc/terrains/stone.jpg');
+    }
+    div div {
+        box-sizing: border-box;
+        width: 25%;
+        height: 100%;
+        padding: 20px;
+        float: left;
+    }
+    #faction-details {
+        display: block;
+        height: 80px;
+        box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        border: 20px solid transparent;
+        border-image: url('sc/widgets/hor-parchment.png') 200 round;
+        overflow: hidden;
+    }
+    #faction-details span {
+        background: rgb(229,206,165);
+    }
+    #symbol {
+
+        margin: 5px;
+    }
+    #faction-name {
+        display: block;
+        padding: 5px;
+        padding-bottom: 15px;
+
+        text-align: center;
+        width: 100%;
+    }
+    .portrait {
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        overflow: hidden;
+        margin: 5px;
+    }
+    .img {
+        width: 100%;
+    }
+    .fl50 {
+        display: block;
+        width: 50%;
+        float: left;
+        height: 70%;
+    }
+    .fl100 {
+        display: block;
+        width: 100%;
+        float: left;
+    }
+    .r {
+        display: block;
+        float: right;
+    }
+    #end-turn {
+        border: 0;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 0 3px 5px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        cursor: pointer;
+        outline: none;
+    }
+</style>
+<div>
+    <span id="faction-details">
+        <span class="fl50">
+            <span class="portrait">
+                <img src="sc/portraits/king.jpg" class="img"/>
+            </span>
+        </span>
+        <span class="fl50">
+            <img id="symbol" src="cici" width="35" height="40" class="r"/>
+        </span>
+        <span class="fl100">
+            <span id="faction-name">Faction Name</span>
+        </span>
+    </span>
+
+</div>
+<div>
+    <span>Faction Name</span>
+</div>
+<div>
+    <span>Ciao</span>
+</div>
+<div>
+    <button id="end-turn" class="r">
+        <img src="sc/widgets/hourglass.png" class="img"/>
+    </button>
+</div>

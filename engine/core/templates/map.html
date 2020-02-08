@@ -7,6 +7,8 @@
     }
     .map-wrapper {
         position: relative;
+        background-image: url('sc/terrains/sea.jpg');
+        background-size: 68px 46px;
     }
 
     label {
@@ -20,10 +22,11 @@
     div.map-wrapper svg {
         display: block;
         width: 100%;
-        height: 500px;
+        height: 450px;
+        transition: transform 1s;
     }
 
-    #zoom-checkbox:checked + div.map-wrapper svg {
+    #zoom-checkbox:checked + div.map-wrapper {
         transform: scale(2);
         transform-origin: left top;
     }
@@ -72,6 +75,7 @@
     </svg>    
     <slot></slot>
 </div>
+<slot name="panel-faction"></slot>
 <slot name="panel-info"></slot>
 
 <!--

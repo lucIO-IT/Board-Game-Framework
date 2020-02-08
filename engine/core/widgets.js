@@ -41,7 +41,23 @@ class PanelInfo extends GameElement {
         this.__updateValue__();
     }
 }
-
 customElements.define('panel-info', PanelInfo)
+class PanelFaction extends GameElement {
+    constructor(){
+        super();
+        this.template_url = 'engine/core/templates/panel_faction.html';
+    }
+    __registerCode__(div){
+        const f = () => {
+            let p = JSON.parse(this.getAttribute('details'));
+            console.log(p);
+            this.querySelector('#symbol').src =  p.symbol;
+            this.querySelector('#faction-name').innerHTML = JSON.parse(this.getAttribute('details')).name;
+        }
+        setTimeout(f, 500);
+    }
 
-export {PanelInfo};
+}
+customElements.define('panel-faction', PanelFaction)
+
+export {PanelInfo, PanelFaction};
