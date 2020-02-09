@@ -12,8 +12,7 @@ class GameMap extends GameElement {
 
     __panelInfo__(info){
         const panel = document.querySelector('panel-info');
-        panel.setAttribute('content', info.content);
-        panel.setAttribute('url', info.image);
+        panel.setAttribute('details', info);
         panel.style.display = 'block';
     }
 
@@ -26,10 +25,7 @@ class GameMap extends GameElement {
                     //path.classList.add(this.factions[faction].name);
                     path.setAttribute('style', 'fill: ' + this.factions[faction].color + ';');
                     path.addEventListener('click', event => {
-                        this.__panelInfo__({
-                            content: regions[event.target.id].get_panel_info(),
-                            image: regions[event.target.id].get_terrain()
-                        });
+                        this.__panelInfo__(regions[event.target.id].get_panel_info());
                         let handler = event => {
                             event.preventDefault();
                             console.log(event.target.id)

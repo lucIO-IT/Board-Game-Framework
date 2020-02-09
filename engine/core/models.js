@@ -14,11 +14,12 @@ class Faction extends DataModel {
 
     //methods
     get_panel_info(){
-        return `
-            <li>Faction: ${this.name}</li>
-            <li>Leader: ${this.king.name}</li>
-            <li>Rank: ${this.rank}</li>
-        `;
+//        return `
+//            <li>Faction: ${this.name}</li>
+//            <li>Leader: ${this.king.name}</li>
+//            <li>Rank: ${this.rank}</li>
+//        `;
+          return this;
     }
     update_info_bar(){
         return `
@@ -57,7 +58,7 @@ class Region extends DataModel {
         this.name = args.name;
         this.capital = args.capital;
         this.income = this.__check_arg__(args.income);
-        this.population = this.__check_arg__(args.pop);
+        this.population = this.__check_arg__(args.population);
         this.neighbours = args.neighbours;
         this.army = this.__check_arg__(args.army);
         this.garrison = this.__check_arg__(args.garrison);
@@ -69,12 +70,13 @@ class Region extends DataModel {
 
     //methods
     get_panel_info(){
-        return `
-            <li>Province: ${this.name}</li>
-            <li>Capital: ${this.capital}</li>
-            <li>Troops: ${this.troops}</li>
-            <li>Defence: ${this.defence}</li>
-        `;
+//        return `
+//            <li>Province: ${this.name}</li>
+//            <li>Capital: ${this.capital}</li>
+//            <li>Troops: ${this.troops}</li>
+//            <li>Defence: ${this.defence}</li>
+//        `;
+        return JSON.stringify(this);
     }
     get_terrain(){
         return `${this.terrain_image_url}`;

@@ -28,7 +28,7 @@ class DataModel {
     constructor(...restArgs) {
         this.name = this.__checkData__(restArgs);
         this.id = this.__checkID__(restArgs);
-        this.proxy = new Proxy(this, handler);
+        //this.proxy = new Proxy(this, handler);
     }
 
     __checkData__(data_arg){
@@ -62,6 +62,8 @@ class DataModel {
         return `${name}_${token}`;
     }
 
+    /*
+
     __read__(){
         return this.proxy;
     }
@@ -75,6 +77,8 @@ class DataModel {
             this.proxy[e] = args[e];
         });
     }
+
+    */
 
     __saveItem__(){
         //Create and Overwrite JSON item in localStorage
@@ -108,6 +112,7 @@ class GameElement extends HTMLElement {
         this.shadow = this.attachShadow({mode: 'open'});
         this.template_url = false;
         this.template = 'insert content';
+        this.details = JSON.parse(this.getAttribute('details'));
     }
 
     __ajaxTemplateLoad__(f, div, shadow, url){
