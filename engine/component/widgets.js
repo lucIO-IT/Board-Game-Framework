@@ -1,4 +1,4 @@
-import {GameElement} from './core.js';
+import {GameElement} from '../core/core.js';
 
 class PanelInfo extends GameElement {
     constructor(){
@@ -18,28 +18,7 @@ class PanelInfo extends GameElement {
     }
 
     __registerCode__(div){
-        const f = () => {
-            this.querySelector('.panel-info').style.width =  this.getAttribute('width') + 'px';
-            this.__getData__();
-        }
-        setTimeout(f, 500);      
-    }
-
-    static get observedAttributes() {
-        return ['details', 'url'];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue){
-        if (oldValue !== newValue){
-            switch(name){
-                case 'details':
-                    this.details = JSON.parse(newValue);
-                    break
-                case 'url':
-                    this.url = newValue;
-                    break            
-            }
-        }
+        this.querySelector('.panel-info').style.width =  this.getAttribute('width') + 'px';
         this.__getData__();
     }
 }
@@ -49,12 +28,14 @@ class PanelFaction extends GameElement {
         super();
         this.template_url = 'engine/core/templates/panel_faction.html';
     }
+
+    __getData__(){
+        this.querySelector('#symbol').src =  this.details.symbol;
+        this.querySelector('#faction-name').innerHTML = this.details.name;
+    }
+
     __registerCode__(div){
-        const f = () => {
-            this.querySelector('#symbol').src =  this.details.symbol;
-            this.querySelector('#faction-name').innerHTML = this.details.name;
-        }
-        setTimeout(f, 500);
+        this.__getData__();
     }
 
 }

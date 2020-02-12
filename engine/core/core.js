@@ -1,34 +1,11 @@
-const handler = {
-    get: (target, name) => {
-        if (name in target){
-            return target[name];
-        }
-    },
-    set: (target, prop, value) => {
-        if (prop in target) {
-            target[prop] = value;
-            const nuEvent = new CustomEvent('objectUpdated', {
-                bubbles: true,
-                cancelable: true,
-                detail: {
-                    obj: target
-                }
-            });
-            document.body.dispatchEvent(nuEvent);            
-            return true;
-        } else {
-            console.log(target);
-            console.log(prop);
-            console.log(value);
-        }
-    }
-}
-
 class DataModel {
+    /* ****************************************************************
+    Questa è la classe madre dei models utilizzata per interfacciarsi
+    con il database (TinyDB o Web Storage) tramite JSON
+    **************************************************************** */
     constructor(...restArgs) {
         this.name = this.__checkData__(restArgs);
         this.id = this.__checkID__(restArgs);
-        //this.proxy = new Proxy(this, handler);
     }
 
     __checkData__(data_arg){
@@ -62,38 +39,30 @@ class DataModel {
         return `${name}_${token}`;
     }
 
-    /*
-
-    __read__(){
-        return this.proxy;
+    readItem(){
+        return this;
     }
 
-    __detailString__(){
-        return `${Object.keys(this.proxy).map(key => `${key}: ${this.proxy[key]}`).join("\n")}`;
-    }
-
-    __update__(args){
+    updateItem(args){
         Object.keys(args).forEach(e => {
-            this.proxy[e] = args[e];
+            this[e] = args[e];
         });
     }
 
-    */
-
-    __saveItem__(){
+    saveItem(){
         //Create and Overwrite JSON item in localStorage
         const data = JSON.stringify(this);
         const id = this.__getId__();
         localStorage.setItem(id, data);
     }
 
-    __loadItem__(){
+    loadItem(){
         //Load item as JSON from localStorage
         const id = this.__getId__();
         return localStorage.getItem(id);
     }
 
-    __deleteItem__(){
+    deleteItem(){
         //Delete item from localStorage
         const id = this.__getId__();
         localStorage.removeItem(id);
@@ -113,10 +82,11 @@ class GameElement extends HTMLElement {
         this.template_url = false;
         this.template = 'insert content';
         this.details = JSON.parse(this.getAttribute('details'));
+        console.log(this.details);
     }
 
     __ajaxTemplateLoad__(f, div, shadow, url){
-        var xhr;
+        let xhr;
         if (window.XMLHttpRequest) {
             xhr = new XMLHttpRequest();
          } else {
@@ -137,8 +107,6 @@ class GameElement extends HTMLElement {
     }
 
     connectedCallback(){
-        /*this.style.top = '0';
-        this.style.left = '0';*/
         const div = document.createElement('div');
         div.style.width = `${this.getAttribute('width')}px`;
         div.style.height = `${this.getAttribute('height')}px`;
@@ -149,12 +117,38 @@ class GameElement extends HTMLElement {
             div.innerHTML = this.template;
             this.shadow.appendChild(div);
         }
-        this.__registerCode__(div);
+        this.__connectTimeout__(div);
     }
 
     querySelector(x){
         const s = this.shadow;
         return s.querySelector(x)
+    }
+
+    __connectTimeout__(div){
+        const f = () => {
+            this.__registerCode__(div);
+        }
+        setTimeout(f, 500)
+    }
+
+    __getData__(){
+        //insert code here
+    }
+
+    static get observedAttributes() {
+        return ['details'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue){
+        if (oldValue !== newValue){
+            switch(name){
+                case 'details':
+                    this.details = JSON.parse(newValue);
+                    break
+            }
+        }
+        this.__getData__();
     }
 
     __registerCode__(div){

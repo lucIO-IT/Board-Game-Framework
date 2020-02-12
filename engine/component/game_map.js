@@ -1,18 +1,17 @@
-import {GameElement} from './core/core.js';
-import {draggableScroll} from './core/utils/draggable_scroll.js';
-import {factions} from './factions.js';
-import {regions} from './regions.js';
+import {GameElement} from '../core/core.js';
+import * as utils from '../core/utils/draggable_scroll.js';
 
 class GameMap extends GameElement {
     constructor(){
         super();
-        this.factions = factions;
+        this.factions = [];
+        this.regions = [];
         this.template_url = 'engine/core/templates/map.html';
     }
 
     __panelInfo__(info){
         const panel = document.querySelector('panel-info');
-        panel.setAttribute('details', info);
+        panel.setAttribute('details', JSON.stringify(info));
         panel.style.display = 'block';
     }
 
@@ -25,7 +24,7 @@ class GameMap extends GameElement {
                     //path.classList.add(this.factions[faction].name);
                     path.setAttribute('style', 'fill: ' + this.factions[faction].color + ';');
                     path.addEventListener('click', event => {
-                        this.__panelInfo__(regions[event.target.id].get_panel_info());
+                        this.__panelInfo__(this.regions[event.target.id].readItem());
                         let handler = event => {
                             event.preventDefault();
                             console.log(event.target.id)
@@ -40,12 +39,9 @@ class GameMap extends GameElement {
     }
 
     __registerCode__(div){
-        const f = () => {
-            draggableScroll(div);
-            this.__loadRegionsfaction__(div);
-            this.shadow.appendChild(div);
-        }
-        setTimeout(f, 500)
+        utils.draggableScroll(div);
+        this.__loadRegionsfaction__(div);
+        this.shadow.appendChild(div);
     }
 }
 

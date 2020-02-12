@@ -13,21 +13,6 @@ class Faction extends DataModel {
     }
 
     //methods
-    get_panel_info(){
-//        return `
-//            <li>Faction: ${this.name}</li>
-//            <li>Leader: ${this.king.name}</li>
-//            <li>Rank: ${this.rank}</li>
-//        `;
-          return this;
-    }
-    update_info_bar(){
-        return `
-            <span>Faction name: ${this.name}</span>
-            <span>Leader: ${this.king.name}</span>
-            <span>Treasury: ${this.money}</span>
-        `;
-    }
     get_income(regions){
         this.provinces.forEach(e => {
             this.money += Math.round(regions[e].income * (regions[e].population/10))
@@ -35,20 +20,6 @@ class Faction extends DataModel {
     }
     faction_end_turn(regions){
         this.get_income(regions);
-    }
-    /*acquireRegion(){
-        let current_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(target.id))[0];
-        let new_faction = Object.keys(factions).filter(e => factions[e].provinces.includes(CURRENT_REGION))[0];
-        target.classList.remove(current_faction);
-        factions[current_faction].provinces = factions[current_faction].provinces.filter(e => e !== target.id);
-        target.classList.add(new_faction);
-        factions[new_faction].provinces.push(target.id);
-    }*/
-    acquireRegion(region){
-        this.provinces.push(region)
-    }
-    loseRegion(region){
-        this.provinces = this.provinces.filter(e => e !== region);
     }
 }
 
@@ -69,15 +40,6 @@ class Region extends DataModel {
     }
 
     //methods
-    get_panel_info(){
-//        return `
-//            <li>Province: ${this.name}</li>
-//            <li>Capital: ${this.capital}</li>
-//            <li>Troops: ${this.troops}</li>
-//            <li>Defence: ${this.defence}</li>
-//        `;
-        return JSON.stringify(this);
-    }
     get_terrain(){
         return `${this.terrain_image_url}`;
     }
