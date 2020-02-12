@@ -23,6 +23,7 @@ class PanelInfo extends GameElement {
     }
 }
 customElements.define('panel-info', PanelInfo)
+
 class PanelFaction extends GameElement {
     constructor(){
         super();
