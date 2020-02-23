@@ -76,6 +76,8 @@
         cursor: pointer;
         outline: none;
         overflow: hidden;
+        width: 55px;
+        height: 55px;
     }
 
     ul {
@@ -103,4 +105,14 @@
         position: absolute;
         bottom: -10px;
         font-size: 10px;
+    }
+
+    .helm {
+        background: url('sc/widgets/helm.png') no-repeat;
+        background-size: contain, cover;
+    }
+
+    .castle {
+        background: url('sc/widgets/castle.png') no-repeat;
+        background-size: contain, cover;
     }

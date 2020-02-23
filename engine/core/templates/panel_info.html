@@ -37,16 +37,6 @@
         height: 55px;
     }
 
-    .helm {
-        background: url('sc/widgets/helm.png') no-repeat;
-        background-size: contain, cover;
-    }
-
-    .castle {
-        background: url('sc/widgets/castle.png') no-repeat;
-        background-size: contain, cover;
-    }
-
     .close-btn {
         width: 25px;
         height: 25px;
@@ -96,8 +86,12 @@
             </div>
         </div>
         <div class="footer bar">
-            <button title="Raise Troops" class="engine-action helm shadow circle" data-action="" data-value=""></button>
-            <button title="Incrase Defence" class="engine-action castle shadow circle" data-action="" data-value=""></button>
+            <slot name="raise_troops"></slot>
+            <slot name="incrase_defence"></slot>
+            <!--
+            <button id="raise_troops" title="Raise Troops" class="engine-action helm shadow circle" data-action="raise_troops" data-value=""></button>
+            <button id="incrase_defence" title="Incrase Defence" class="engine-action castle shadow circle" data-action="incrase_defence" data-value=""></button>
+            -->
         </div>
     </div>
 </div>

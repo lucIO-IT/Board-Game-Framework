@@ -77,7 +77,7 @@ class DataModel {
 class GameElement extends HTMLElement {
 
     constructor(){
-        super()
+        super();
         this.shadow = this.attachShadow({mode: 'open'});
         this.template_url = false;
         this.template = 'insert content';

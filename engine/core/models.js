@@ -6,6 +6,7 @@ class Faction extends DataModel {
         this.name = args.name;
         this.royal_family = args.royal_family;
         this.provinces = args.provinces; //factions is an array
+        this.symbol = args.symbol;
         this.color = args.color;
         this.money = args.money;
         this.rank = args.rank;
@@ -26,6 +27,7 @@ class Faction extends DataModel {
 class Region extends DataModel {
     constructor(args){
         super(args);
+        this.id = args.id;
         this.name = args.name;
         this.capital = args.capital;
         this.income = this.__check_arg__(args.income);
@@ -44,15 +46,19 @@ class Region extends DataModel {
         return `${this.terrain_image_url}`;
     }
     raise_troops(faction){
+        let success;
         if (faction.money > 50){
             this.army += 25;
             faction.money = faction.money - 50;
-            faction.update_info_bar();
-            set_troops()
-            return `<li>25 troops raised in ${this.name}</li>`
+            //faction.update_info_bar();
+            this.set_troops()
+            console.log(`25 troops raised in ${this.name}`)
+            success = true;
         } else {
-            return `<li>Treasury is not enough to raise troops</li>`
+            console.log(`Treasury is not enough to raise troops`)
+            success = false;
         }
+        return success;
     }
     set_troops(){
         this.troops = this.army + this.garrison;
@@ -66,22 +72,30 @@ class Region extends DataModel {
         restore_garrison();
     }
     incrase_defence(faction){
+        let success;
         if (faction.money > 150 && this.defence < 5){
             this.defence += 1;
             faction.money = faction.money - 150;
-            return `<li>Defence upgraded in ${this.name}</li>`
+            console.log(`Defence upgraded in ${this.name}`);
+            success = true;
         } else {
-            return `<li>Is not possible to upgrade defence in this province</li>`
+            console.log(`Is not possible to upgrade defence in this province`);
+            success = false;
         }
+        return success;
     }
     incrase_structures(faction){
+        let success;
         if (faction.money > 150 && this.structures < 5){
             this.structures += 1;
             faction.money = faction.money - 150;
-            return `<li>Structures upgraded in ${this.name}</li>`
+            console.log(`Structures upgraded in ${this.name}`);
+            success = true;
         } else {
-            return `<li>Is not possible to upgrade structures in this province</li>`
+            console.log(`Is not possible to upgrade structures in this province`);
+            success = false;
         }
+        return success;
     }
 }
 

@@ -24,6 +24,9 @@ class GameMap extends GameElement {
                     //path.classList.add(this.factions[faction].name);
                     path.setAttribute('style', 'fill: ' + this.factions[faction].color + ';');
                     path.addEventListener('click', event => {
+                        const sound = new Audio("sc/sounds/selection.mp3");
+                        sound.volume = '0.35';
+                        sound.play();
                         this.__panelInfo__(this.regions[event.target.id].readItem());
                         let handler = event => {
                             event.preventDefault();
