@@ -30,6 +30,13 @@
         text-align: center;
         width: 100%;
     }
+    .main-content {
+        background: rgb(210,206,206);
+        height: 27vh;
+        overflow-y: scroll;
+        border: 10px solid transparent;
+        border-image: url('sc/widgets/border.png') 40 round;
+    }
 </style>
 <div class="fl25">
     <span id="faction-details" class="shadow">
@@ -41,19 +48,31 @@
         <span class="fl50" style="height: 70%;">
             <img id="symbol" src="cici" width="35" height="40" class="r"/>
         </span>
-        <span class="fl50">
+        <span class="fl100">
             <span id="faction-name">Faction Name</span>
-        </span>
-        <span class="fl50">
-            Treasury: <span id="faction-treasury">0</span>
         </span>
     </span>
 </div>
-<div class="fl50">
-    <span>Ciao</span>
-</div>
+<slot name="log-message" class="fl50 main-content">
+    <div style="padding: 5px;">Welcome to the game</div>
+</slot>
 <div class="fl25">
+    <span class="fl100">
+        <span class="info-cracker r shadow">
+            Treasury: <span id="faction-treasury">0</span>
+        </span>
+    </span>
+    <span class="fl100 r">
+        <span class="info-cracker r shadow">
+            Turn: <span id="turn-number">0</span>
+        </span>
+    </span>
+    <slot name="end_button" class="fl100">
+        <button class="info-cracker r shadow">End Turn</button>
+    </slot>
+    <!--
     <button id="end-turn" class="r shadow circle">
         <img src="sc/widgets/hourglass.png" class="img"/>
     </button>
+    -->
 </div>

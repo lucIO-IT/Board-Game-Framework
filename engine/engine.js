@@ -45,8 +45,6 @@ class GameEngine {
     }
 
     __create_game__(){
-        console.log(this.factions);
-        console.log(this.regions);
         const map = document.createElement('game-map');
         Object.keys(settings.map).forEach(key => {
             map.setAttribute(key, settings.map[key])
@@ -58,6 +56,20 @@ class GameEngine {
         GameElement.renderElement('panel-info', map, settings.panel_info);
         this.__engineButton__('raise_troops', 'engine-action helm shadow circle', this.panel);
         this.__engineButton__('incrase_defence', 'engine-action castle shadow circle', this.panel);
+        var log_panel = document.createElement('div');
+        log_panel.setAttribute('slot', 'log-message')
+        log_panel.style = ''
+        document.getElementById(this.bar).appendChild(log_panel);
+        let console = {};
+        console.log = m => {
+            let span = document.createElement('div');
+            span.style = 'padding: 5px;'
+            var d = new Date();
+            span.innerHTML = `${m} <br/>
+            ${d.getFullYear()}/${d.getMonth()}/${d.getDate()} - ${d.getHours()}:${d.getMinutes()}`;
+            log_panel.prepend(span);
+            };
+        window.console = console;
         setTimeout(() => this.__add_engine_actions__(), 1000);
         const soundtrack = new Audio("sc/sounds/soundtrack.mp3");
         soundtrack.volume = this.settings.audio.volume;
