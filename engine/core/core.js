@@ -8,6 +8,13 @@ class DataModel {
         this.id = this.__checkID__(restArgs);
     }
 
+    __controlArgs__(args, params){
+        params.forEach(e => {
+        if (Object.keys(args).includes(e) != true){
+            throw `Attention: ${e} is not defined`;
+        }});
+    }
+
     __checkData__(data_arg){
         const args = Array.from(data_arg)[0];
         if (!args.name){

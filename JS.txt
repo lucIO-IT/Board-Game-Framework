@@ -1,0 +1,20 @@
+function mountModule(module_obj){
+  console.log(typeof module_obj);
+  switch (typeof module_obj){
+    case 'function':
+      return module_obj
+    default:      
+      throw 'Module is not a function or a class'
+  }
+}
+
+function render(html, context){
+  const template = document.createElement('div');
+  template.innerHTML = html.innerHTML;
+  document.body.appendChild(template);
+  Object.keys(context).forEach(key => {
+    let str = '{{'+key+'}}';
+    console.log(template.innerHTML);
+    template.innerHTML = template.innerHTML.replace(str, context[key])
+  });  
+}

@@ -48,9 +48,8 @@ class Region extends DataModel {
     raise_troops(faction){
         let success;
         if (faction.money > 50){
-            this.army += 25;
+            this.garrison += 25;
             faction.money = faction.money - 50;
-            //faction.update_info_bar();
             this.set_troops()
             console.log(`25 troops raised in ${this.name}`)
             success = true;
@@ -61,7 +60,21 @@ class Region extends DataModel {
         return success;
     }
     set_troops(){
+        let army = 0;
+        if (this.army != null){
+            army = this.army.spearmen;
+        }
         this.troops = this.army + this.garrison;
+    }
+    raise_army(args){
+        this.army = new Army(args)
+    }
+    move_army(region){
+        region.army = this.army;
+        this.army = null;
+    }
+    attack_region(region){
+        //insert code here
     }
     restore_garrison(){
         if (this.garrison < this.defence * 50){
@@ -96,6 +109,20 @@ class Region extends DataModel {
             success = false;
         }
         return success;
+    }
+}
+
+class Army extends DataModel {
+    constructor(){
+        super(args);
+        this.__controlArgs__(args, ['faction', 'cavalry', 'spearmen', 'archers']);
+        this.name = args.name;
+        this.faction = args.faction;
+        this.attacker = false;
+        this.cavalry = args.cavalry;
+        this.spearmen = args.spearmen;
+        this.archers = args.archers;
+        this.loot = 0;
     }
 }
 

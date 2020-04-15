@@ -21,8 +21,31 @@ class PanelInfo extends GameElement {
 
     __registerCode__(div){
         this.querySelector('.panel-info').style.width =  this.getAttribute('width') + 'px';
+        this.querySelector('#army_recruit_btn').addEventListener('click', () => this.call_army_panel(this.details))
         this.__getData__();
     }
+
+    call_army_panel(region) {
+            const div = document.createElement('div');
+            div.style = 'position: fixed; top: 20%; left: 30%; width: 40%; background: white; z-index: 1; padding: 20px;'
+            div.innerHTML = `
+                <a href="javascript:void()" class="f", onclick="document.body.removeChild(this.parentNode);">close</a>
+                <form class="form fl100 engine-form" target="${region.id}" action="raise_army">
+                    <span class="fl100 title">Create Army in ${region.name}</span>
+                    <hr/>
+                    <label for="cavalry" class="fl50">Cavalry</label>
+                    <input id="cavalry" type="number" value="0" class="fl50"/>
+                    <label for="spearmen" class="fl50">Spearmen</label>
+                    <input id="spearmen" type="number" value="0" class="fl50"/>
+                    <label for="archers" class="fl50">Archers</label>
+                    <input id="archers" type="number" value="0" class="fl50"/>
+                    <button>Send</button>
+                </form>
+            `;
+            document.body.appendChild(div);
+        }
+
+
 }
 customElements.define('panel-info', PanelInfo);
 

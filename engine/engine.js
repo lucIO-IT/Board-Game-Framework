@@ -45,6 +45,7 @@ class GameEngine {
     }
 
     __create_game__(){
+        //document.querySelectorAll('form').forEach(e.addEventListener('submit', event => event.preventDefault()));
         const map = document.createElement('game-map');
         Object.keys(settings.map).forEach(key => {
             map.setAttribute(key, settings.map[key])
@@ -119,17 +120,27 @@ class GameEngine {
         }
     }
 
+    __createAction__(e){
+        var action = this.__getAction__(e.getAttribute('action'));
+        var region = this.__getRegion__(e.getAttribute('target'));
+        var faction = this.__getFaction__(e.getAttribute('target'));
+        var f = action(region, faction);
+        this.__audioButton__(f);
+        this.__update_panel__(region);
+        this.__update_bar__(faction);
+        if (e.tagName.toLowerCase() == "div"){
+            console.log('bravii');
+            document.body.removeChild(e.parentNode);
+        }
+        return false;
+    }
+
     __add_engine_actions__(){
         document.querySelectorAll('.engine-action').forEach(e => {
-            e.addEventListener('click', () => {
-                var action = this.__getAction__(e.getAttribute('action'));
-                var region = this.__getRegion__(e.getAttribute('target'));
-                var faction = this.__getFaction__(e.getAttribute('target'));
-                var f = action(region, faction);
-                this.__audioButton__(f);
-                this.__update_panel__(region);
-                this.__update_bar__(faction);
-            });
+            e.addEventListener('click', () => this.__createAction__(e));
+        });
+        document.querySelectorAll('.engine-form').forEach(e => {
+            e.addEventListener('click', () => this.__createAction__(e));
         });
     }
 
