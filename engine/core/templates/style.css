@@ -78,6 +78,11 @@
         overflow: hidden;
     }
 
+    .engine-button {
+        width: 55px;
+        height: 55px;
+    }
+
     ul {
         padding: 0;
         margin: 0;
@@ -103,4 +108,59 @@
         position: absolute;
         bottom: -10px;
         font-size: 10px;
+    }
+
+    .helm {
+        background: url('sc/widgets/helm.png') no-repeat;
+        background-size: contain, cover;
+    }
+
+    .castle {
+        background: url('sc/widgets/castle.png') no-repeat;
+        background-size: contain, cover;
+    }
+
+    .info-cracker {
+        display: block;
+        /*width: 180px;*/
+        width: 100%;
+        padding: 5px;
+        margin: 3px 0;
+        text-align: center;
+        border-radius: 3px;
+        border: 5px solid transparent;
+        box-shadow: inset 0 0 6px rgba(129,106,65,0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(129,106,65,0.3);
+        -moz-shadow: inset 0 0 6px rgba(129,106,65,0.3);
+        background: rgb(229,206,165);
+        border-image: url('../../../sc/widgets/hor-parchment.png') 140 round;
+    }
+
+    button.info-cracker {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        -moz-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background: rgb(175,165,155);
+        border-image: url('../../../sc/widgets/iron.jpg') 50 round;
+    }
+
+    .height25 {
+        height: 25%;
+    }
+    .height50 {
+        height: 50%;
+    }
+
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     }

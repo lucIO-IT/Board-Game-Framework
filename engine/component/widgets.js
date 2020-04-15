@@ -15,6 +15,8 @@ class PanelInfo extends GameElement {
         this.querySelector('#defence').innerHTML = `${this.details.defence}`;
         this.querySelector('#garrison').innerHTML = `${this.details.troops}`;
         this.querySelector('#income').innerHTML = `${this.details.income}`;
+        document.querySelector('#raise_troops').setAttribute('target', this.details.id);
+        document.querySelector('#incrase_defence').setAttribute('target', this.details.id);
     }
 
     __registerCode__(div){
@@ -22,7 +24,7 @@ class PanelInfo extends GameElement {
         this.__getData__();
     }
 }
-customElements.define('panel-info', PanelInfo)
+customElements.define('panel-info', PanelInfo);
 
 class PanelFaction extends GameElement {
     constructor(){
@@ -33,6 +35,7 @@ class PanelFaction extends GameElement {
     __getData__(){
         this.querySelector('#symbol').src =  this.details.symbol;
         this.querySelector('#faction-name').innerHTML = this.details.name;
+        this.querySelector('#faction-treasury').innerHTML = this.details.money;
     }
 
     __registerCode__(div){
@@ -40,6 +43,6 @@ class PanelFaction extends GameElement {
     }
 
 }
-customElements.define('panel-faction', PanelFaction)
+customElements.define('panel-faction', PanelFaction);
 
 export {PanelInfo, PanelFaction};
